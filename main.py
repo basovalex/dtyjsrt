@@ -30,12 +30,18 @@ def check_date():
         day = d + datetime.timedelta(days=2)
     if now.weekday()+1 == 7:
         day = d + datetime.timedelta(days=1)
+    den = day.day
+    if d.day < 10:
+        den = '0' + str(day.day)
+    month = day.month
+    if d.month < 10:
+        month = '0' + str(day.month)
 
 
 
 
-    dls = f"https://school-200.ru/doc/schedule/2022-2023/changes_{day.day}-{day.month}-{day.year}_5-11.xls"
-    dls1 = f"https://school-200.ru/doc/schedule/2022-2023/changes_{day.day}-{day.month}-{day.year}_1-4.xls"
+    dls = f"https://school-200.ru/doc/schedule/2022-2023/changes_{den}-{month}-{day.year}_5-11.xls"
+    dls1 = f"https://school-200.ru/doc/schedule/2022-2023/changes_{den}-{month}-{day.year}_1-4.xls"
     resp = requests.get(dls)
     resp1 = requests.get(dls1)
 
@@ -168,7 +174,7 @@ def check_callback_data(call):
             bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.id,
                                   text=f"Выбери класс где ты учишься.", reply_markup=markup)
 
-    if call.data == "btn1":
+    if call.data == "btn2":
         hours = datetime.datetime.now() + datetime.timedelta(hours=5)
         hours1 = datetime.datetime.today() + datetime.timedelta(hours=5)
         if check_date() == True:
