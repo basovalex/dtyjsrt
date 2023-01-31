@@ -31,7 +31,7 @@ def check_date():
     if now.weekday()+1 == 7:
         day = d + datetime.timedelta(days=1)
     den = day.day
-    if den.day < 10:
+    if int(den) < 10:
         den = '0' + str(day.day)
     month = day.month
     if day.month < 10:
