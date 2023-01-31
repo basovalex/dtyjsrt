@@ -36,6 +36,8 @@ def check_date():
     month = day.month
     if d.month < 10:
         month = '0' + str(day.month)
+    if (now + datetime.timedelta(days=1)).month == now.month + 1:
+        month = day.month
 
 
 
