@@ -45,6 +45,7 @@ def check_date():
     dls1 = f"https://school-200.ru/doc/schedule/2022-2023/changes_{den}-{month}-{day.year}_1-4.xls"
     resp = requests.get(dls)
     resp1 = requests.get(dls1)
+    print(dls)
 
     try:
         output = open('test.xls', 'wb')
@@ -82,28 +83,6 @@ def start(message):
                      f"Привет, я бот который буду присылать тебе расписание. 👋 \nДля начала скажи в какую смену ты учишься? 🤔",
                      reply_markup=markup)
     d = 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @bot.callback_query_handler(func=lambda call: True)
 def check_callback_data(call):
