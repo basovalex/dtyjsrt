@@ -10,3 +10,4 @@ excel2img~=1.4.0
 openpyxl~=3.0.10
 pywin32
 xlrd2
+types-pywin32
