@@ -1,3 +1,4 @@
+import excel2img
 import telebot
 from telebot import types
 import datetime
@@ -6,6 +7,12 @@ from datetime import timedelta
 import requests
 from bs4 import BeautifulSoup
 import time
+import openpyxl
+from xlutils.copy import copy
+from xlrd import open_workbook
+
+#from win32.api import *
+
 
 bot = telebot.TeleBot("5951494078:AAF5YF_v358mhS9OY6iQqgdX1IP-FuAyW5k")
 b = []
@@ -60,10 +67,18 @@ def check_date():
         path1 = "test1.xls"
 
         inputWorkbook = xlrd.open_workbook(path, formatting_info=True)
+        wb = copy(inputWorkbook)
+        idx = inputWorkbook.sheet_names().index('Изменения в расписании')
+        wb.get_sheet(idx).name = u'Sheet'
+        wb.save('test.xls')
         inputWorksheet = inputWorkbook.sheet_by_index(0)
         sheets = inputWorkbook.sheet_names()
 
         inputWorkbook1 = xlrd.open_workbook(path1, formatting_info=True)
+        wb = copy(inputWorkbook1)
+        idx = inputWorkbook1.sheet_names().index('Изменения в расписании')
+        wb.get_sheet(idx).name = u'Sheet'
+        wb.save('test1.xls')
         inputWorksheet1 = inputWorkbook1.sheet_by_index(0)
         sheets1 = inputWorkbook1.sheet_names()
 
@@ -2319,6 +2334,7 @@ def check_callback_data(call):
         b = []
         for index, sh in enumerate(sheets):
             sheet = inputWorkbook.sheet_by_index(index)
+            print(sheet)
             xfx = sheet.cell_xf_index(30, 5)
             xf = inputWorkbook.xf_list[xfx]
             bgx = xf.background.pattern_colour_index
@@ -2412,6 +2428,12 @@ def check_callback_data(call):
 
     elif call.data == "btn102":
         check = check_date()
+        excel2img.export_img("test.xls", "test.png", "", "Sheet!B41:C49")
+        # with open('test.png', 'rb') as file:
+        #    photo = types.InputMediaPhoto(file)
+        # file.close()
+        bot.delete_message(call.message.chat.id, call.message.id)
+        bot.send_photo(call.message.chat.id, photo=open('test.png', 'rb'), caption='Расписание <b>10Б</b> ', parse_mode='html')
         sheets = check[2]
         inputWorkbook = check[0]
         inputWorksheet = check[1]
@@ -2419,13 +2441,13 @@ def check_callback_data(call):
         b = []
         for index, sh in enumerate(sheets):
             sheet = inputWorkbook.sheet_by_index(index)
-            xfx = sheet.cell_xf_index(40, 2)
+            xfx = sheet.cell_xf_index(40, 3)
             xf = inputWorkbook.xf_list[xfx]
             bgx = xf.background.pattern_colour_index
         if bgx == 13:
-            b.append('<b>10б-ДО</b>')
+            b.append('<b>10Б-ДО</b>')
         else:
-            b.append('<b>10б</b>')
+            b.append('<b>10Б</b>')
         lessons = datetime.datetime(2022, 12, 3, 8, 00, 00)
         lessons1 = datetime.datetime(2022, 12, 3, 8, 40, 00)
         for i in range(41, 49):
@@ -2456,12 +2478,20 @@ def check_callback_data(call):
         btn_1 = types.InlineKeyboardButton(text='Первая смена', callback_data='btn1')
         btn_2 = types.InlineKeyboardButton(text='Вторая смена', callback_data='btn2')
         markup.add(btn_1, btn_2)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.id,
+        bot.send_message(chat_id=call.message.chat.id,
                               text=b, reply_markup=markup, parse_mode='html')
+
 
 
     elif call.data == "btn103":
         check = check_date()
+        excel2img.export_img("test.xls", "test.png", "", "Sheet!D41:D49")
+        # with open('test.png', 'rb') as file:
+        #    photo = types.InputMediaPhoto(file)
+        # file.close()
+        bot.delete_message(call.message.chat.id, call.message.id)
+        bot.send_photo(call.message.chat.id, photo=open('test.png', 'rb'), caption='Расписание <b>10В</b> ',
+                       parse_mode='html')
         sheets = check[2]
         inputWorkbook = check[0]
         inputWorksheet = check[1]
@@ -2506,8 +2536,8 @@ def check_callback_data(call):
         btn_1 = types.InlineKeyboardButton(text='Первая смена', callback_data='btn1')
         btn_2 = types.InlineKeyboardButton(text='Вторая смена', callback_data='btn2')
         markup.add(btn_1, btn_2)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.id,
-                              text=b, reply_markup=markup, parse_mode='html')
+        bot.send_message(chat_id=call.message.chat.id,
+                         text=b, reply_markup=markup, parse_mode='html')
 
 
     elif call.data == "btn104":
